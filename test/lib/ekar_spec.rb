@@ -9,6 +9,17 @@ describe Ekar do
   after(:each) do
     FileUtils.rm_rf('ekar_test.tmp')
   end
+  
+  describe "list" do
+    
+    it "should list all tasks" do
+      Ekar.desc("A Foo Task")
+      Ekar.task(:foo) do |t|
+      end
+      Ekar.list.should match(/ekar foo\n    A Foo Task/)
+    end
+    
+  end
 
   describe "namespace" do
     
@@ -45,7 +56,7 @@ describe Ekar do
   describe "task" do
     
     it "should yield up an Ekar::Task class with the name of the task preset" do
-      Ekar.task(:foo) do |t|
+      Ekar.task(:foo) do |t, options|
         t.should be_is_a(Ekar::Task)
         t.name.should == "foo"
       end

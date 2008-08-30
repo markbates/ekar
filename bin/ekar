@@ -1,0 +1,17 @@
+#!/usr/local/bin/ruby 
+
+require 'fileutils'
+require File.join(File.dirname(__FILE__), "..", "lib", "ekar")
+
+load(File.join(FileUtils.pwd, "Ekarfile"))
+load(File.join(FileUtils.pwd, "EkarFile"))
+load(File.join(FileUtils.pwd, "ekarfile"))
+
+
+
+if ARGV.include?("-T") || ARGV.include?("--tasks")
+  puts Ekar.list
+else
+  command = Ekar::Command.new(ARGV)
+  command.run
+end

@@ -4,6 +4,7 @@ module Ekar
     attr_accessor :name
     attr_accessor :code_body
     attr_accessor :dependencies
+    attr_accessor :description
     
     def initialize(name, *dependencies, &block)
       self.name = name
@@ -11,9 +12,9 @@ module Ekar
       self.code_body = block
     end
     
-    def run
+    def run(options = [])
       unless self.code_body.nil?
-        self.code_body.call(self)
+        self.code_body.call(self, options)
         return
       end
       raise Ekar::NoCodeDefinitionError.new(name)

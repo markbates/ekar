@@ -24,14 +24,14 @@ spec = Gem::Specification.new do |s|
   s.files = FileList['lib/**/*.*', 'README', 'doc/**/*.*', 'bin/**/*.*']
   s.require_paths << 'lib'
 
-  #s.bindir = "bin"
-  #s.executables << "ekar"
+  s.bindir = "bin"
+  s.executables << "ekar"
   #s.default_executable = ""
   #s.add_dependency("", "")
   #s.add_dependency("", "")
   #s.extensions << ""
-  #s.extra_rdoc_files = ["README"]
-  #s.has_rdoc = true
+  s.extra_rdoc_files = ["README"]
+  s.has_rdoc = true
   #s.platform = "Gem::Platform::Ruby"
   #s.required_ruby_version = ">= 1.8.6"
   #s.requirements << "An ice cold beer."
