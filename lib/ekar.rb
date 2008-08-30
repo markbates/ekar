@@ -33,9 +33,20 @@ module Ekar
     def list
       tasks = []
       Ekar::House.instance.tasks.each do |name, task|
-        tasks << "ekar #{name}\n    #{task.description}" if task.description
+        if task.description
+          tasks << "ekar #{name}\n    #{task.description}"
+        else
+          tasks << "ekar #{name}"
+        end
       end
-      tasks.join("\n\n")
+      tasks.join("\n")
+    end
+    
+    def invoke(name, options = [])
+      task = Ekar::House.get(name)
+      if task
+        task.run(options)
+      end
     end
   
     private

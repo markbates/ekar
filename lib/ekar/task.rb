@@ -13,6 +13,9 @@ module Ekar
     end
     
     def run(options = [])
+      self.dependencies.each do |dep|
+        Ekar::House.get(dep).run(options)
+      end
       unless self.code_body.nil?
         self.code_body.call(self, options)
         return

@@ -19,6 +19,5 @@ end
 if ARGV.include?("-T") || ARGV.include?("--tasks")
   puts Ekar.list
 else
-  command = Ekar::Command.new(ARGV)
-  command.run
+  Ekar::House.find_and_run(ARGV.shift, ARGV)
 end
