@@ -3,11 +3,18 @@
 require 'fileutils'
 require File.join(File.dirname(__FILE__), "..", "lib", "ekar")
 
-load(File.join(FileUtils.pwd, "Ekarfile"))
-load(File.join(FileUtils.pwd, "EkarFile"))
-load(File.join(FileUtils.pwd, "ekarfile"))
+load(File.join(FileUtils.pwd, "Ekarfile"))if File.exists?(File.join(FileUtils.pwd, "Ekarfile"))
+load(File.join(FileUtils.pwd, "EkarFile")) if File.exists?(File.join(FileUtils.pwd, "EkarFile"))
+load(File.join(FileUtils.pwd, "ekarfile")) if File.exists?(File.join(FileUtils.pwd, "ekarfile"))
+
+load(File.join(ENV["HOME"], ".ekarrc")) if File.exists?(File.join(ENV["HOME"], ".ekarrc"))
 
 
+if Ekar::Options[:search_for_ekar_files]
+  Dir.glob(File.join(FileUtils.pwd, "**/*.ekar")) do |f| 
+    load f
+  end
+end
 
 if ARGV.include?("-T") || ARGV.include?("--tasks")
   puts Ekar.list
