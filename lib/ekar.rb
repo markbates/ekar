@@ -47,15 +47,37 @@ module Ekar
       if task
         task.run(options)
       else
-        if Ekar::Options[:raise_error_on_undefined_task]
-          raise Ekar::UndefinedTask.new(name)
-        else
-          puts "Task: '#{name}' does not exist!"
-        end
+        handle_unknown_task(name)
       end
+    end
+    
+    def alias(new_name, old_name)
+      task = Ekar::House.get(old_name)
+      if task
+        task = task.dup
+        if @_ekar_description
+          task.description = @_ekar_description
+          @_ekar_description = nil
+        end
+        Ekar::House.set(new_name, task)
+      else
+        handle_unknown_task(old_name)
+      end
+    end
+    
+    def chain(name, *tasks)
+      Ekar.task(name, *tasks) {}
     end
   
     private
+    def handle_unknown_task(name)
+      if Ekar::Options[:raise_error_on_undefined_task]
+        raise Ekar::UndefinedTask.new(name)
+      else
+        puts "Task: '#{name}' does not exist!"
+      end
+    end
+    
     def fully_qualified_name(name)
       names = current_namespaces.dup
       names << name

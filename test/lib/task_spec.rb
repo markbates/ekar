@@ -3,11 +3,11 @@ require File.dirname(__FILE__) + '/../spec_helper.rb'
 describe Ekar::Task do
 
   before(:each) do
-    FileUtils.rm_rf('ekar_test.tmp')
+    cleanup
   end
   
   after(:each) do
-    FileUtils.rm_rf('ekar_test.tmp')
+    cleanup
   end
 
   it "should raise an Ekar::NoCodeDefinitionError exception if there is no code body" do

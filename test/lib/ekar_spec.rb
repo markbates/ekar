@@ -3,17 +3,60 @@ require File.dirname(__FILE__) + '/../spec_helper.rb'
 describe Ekar do
 
   before(:each) do
-    FileUtils.rm_rf('ekar_test.tmp')
+    cleanup
   end
   
   after(:each) do
-    FileUtils.rm_rf('ekar_test.tmp')
+    cleanup
   end
   
   describe "invoke" do
     
     it "should raise an exception if that task doesn't exist" do
       lambda {Ekar.invoke('asdlkfj')}.should raise_error(Ekar::UndefinedTask)
+    end
+    
+  end
+  
+  describe "alias" do
+    
+    it "should alias off a task to a new name" do
+      Ekar.desc "A Foo Task"
+      Ekar.task(:foo) do
+        File.open('ekar_test.tmp', 'w') {|f| f.puts '12345'}
+      end
+      Ekar.alias(:foo_bar, :foo)
+      Ekar.list.should match(/ekar foo\n    A Foo Task/)
+      Ekar.list.should match(/ekar foo_bar\n    A Foo Task/)
+      Ekar.invoke(:foo_bar)
+      File.read('ekar_test.tmp').should match(/12345/)
+      
+      Ekar.desc "A FooBar Task"
+      Ekar.alias(:foo_bar, :foo)
+      Ekar.list.should match(/ekar foo_bar\n    A FooBar Task/)
+    end
+    
+    it "should raise an exception if the task doesn't exist" do
+      lambda {Ekar.alias(:foo_bar, :fubar)}.should raise_error(Ekar::UndefinedTask)
+    end
+    
+  end
+  
+  describe "chain" do
+    
+    it "should create a 'chain' of tasks with a given name." do
+      Ekar.task(:first_name) do
+        File.open('ekar_test.tmp', 'a') {|f| f.puts 'Mark'}
+      end
+
+      Ekar.task(:last_name, :first_name) do
+        File.open('ekar_test.tmp', 'a') {|f| f.puts 'Bates'}
+      end
+      Ekar.desc "Say the full name"
+      Ekar.chain(:full_name, :last_name, :first_name)
+      Ekar.invoke(:full_name)
+      Ekar.list.should match(/ekar full_name\n    Say the full name/)
+      File.read('ekar_test.tmp').should match(/Mark\nBates/)
     end
     
   end
