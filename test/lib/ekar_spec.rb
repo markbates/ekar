@@ -10,6 +10,14 @@ describe Ekar do
     FileUtils.rm_rf('ekar_test.tmp')
   end
   
+  describe "invoke" do
+    
+    it "should raise an exception if that task doesn't exist" do
+      lambda {Ekar.invoke('asdlkfj')}.should raise_error(Ekar::UndefinedTask)
+    end
+    
+  end
+  
   describe "list" do
     
     it "should list all tasks" do

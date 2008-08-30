@@ -5,7 +5,7 @@ module Ekar
     attr_accessor :options
     
     def initialize
-      self.options = {:search_for_ekar_files => false}
+      self.options = {:search_for_ekar_files => false, :raise_error_on_undefined_task => true}
     end
     
     class << self

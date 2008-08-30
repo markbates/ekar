@@ -46,6 +46,12 @@ module Ekar
       task = Ekar::House.get(name)
       if task
         task.run(options)
+      else
+        if Ekar::Options[:raise_error_on_undefined_task]
+          raise Ekar::UndefinedTask.new(name)
+        else
+          puts "Task: '#{name}' does not exist!"
+        end
       end
     end
   

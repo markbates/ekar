@@ -19,5 +19,6 @@ end
 if ARGV.include?("-T") || ARGV.include?("--tasks")
   puts Ekar.list
 else
-  Ekar::House.find_and_run(ARGV.shift, ARGV)
+  name = ARGV.shift || :default
+  Ekar.invoke(name, ARGV)
 end
