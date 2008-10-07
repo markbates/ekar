@@ -68,6 +68,8 @@ module Ekar
     def chain(name, *tasks)
       Ekar.task(name, *tasks) {}
     end
+    
+    alias_method :run, :invoke
   
     private
     def handle_unknown_task(name)

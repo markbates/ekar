@@ -54,7 +54,7 @@ describe Ekar do
       end
       Ekar.desc "Say the full name"
       Ekar.chain(:full_name, :last_name, :first_name)
-      Ekar.invoke(:full_name)
+      Ekar.run(:full_name)
       Ekar.list.should match(/ekar full_name\n    Say the full name/)
       File.read('ekar_test.tmp').should match(/Mark\nBates/)
     end
