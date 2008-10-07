@@ -9,6 +9,10 @@ end
 
 module Ekar
   
+  {:RSpecTask => 'r_spec_task.rb'}.each do |k, v|
+    autoload k, File.join(File.dirname(__FILE__), 'tasks', v)
+  end
+  
   class << self
   
     def namespace(space)
@@ -19,10 +23,7 @@ module Ekar
   
     def task(name, *dependencies, &block)
       task = Ekar::Task.new(fully_qualified_name(name), *dependencies, &block)
-      if @_ekar_description
-        task.description = @_ekar_description
-        @_ekar_description = nil
-      end
+      handle_task_description(task)
       Ekar::House.set(fully_qualified_name(name), task)
     end
     
@@ -55,10 +56,7 @@ module Ekar
       task = Ekar::House.get(old_name)
       if task
         task = task.dup
-        if @_ekar_description
-          task.description = @_ekar_description
-          @_ekar_description = nil
-        end
+        handle_task_description(task)
         Ekar::House.set(new_name, task)
       else
         handle_unknown_task(old_name)
@@ -72,6 +70,13 @@ module Ekar
     alias_method :run, :invoke
   
     private
+    def handle_task_description(task)
+      if @_ekar_description
+        task.description = @_ekar_description
+        @_ekar_description = nil
+      end
+    end
+    
     def handle_unknown_task(name)
       if Ekar::Options[:raise_error_on_undefined_task]
         raise Ekar::UndefinedTask.new(name)
