@@ -9,7 +9,9 @@ end
 
 module Ekar
   
-  {:RSpecTask => 'r_spec_task.rb'}.each do |k, v|
+  {:RSpecTask => 'r_spec_task.rb', 
+   :GemPackageTask => 'gem_package_task.rb', 
+   :GemSpecTask => 'gem_spec_task.rb'}.each do |k, v|
     autoload k, File.join(File.dirname(__FILE__), 'tasks', v)
   end
   
@@ -22,7 +24,7 @@ module Ekar
     end
   
     def task(name, *dependencies, &block)
-      task = Ekar::Task.new(fully_qualified_name(name), *dependencies, &block)
+      task = Ekar::Task.new(fully_qualified_name(name), [dependencies].flatten.collect{|d| d.to_s.match(/:/) ? d : fully_qualified_name(d)}, &block)
       handle_task_description(task)
       Ekar::House.set(fully_qualified_name(name), task)
     end
@@ -48,7 +50,15 @@ module Ekar
       if task
         task.run(options)
       else
-        handle_unknown_task(name)
+        a = name.to_s.split(':')
+        if a.size == 1
+          handle_unknown_task(name)
+        else
+          n = a.pop # get the name of the task
+          a.pop # remove one level
+          a << n
+          invoke(a.join(':'), options)
+        end
       end
     end
     

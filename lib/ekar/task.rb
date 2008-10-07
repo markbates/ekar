@@ -11,7 +11,7 @@ module Ekar
     
     def initialize(name, *dependencies, &block)
       self.name = name
-      self.dependencies = dependencies
+      self.dependencies = dependencies.flatten
       self.code_body = block
       self.maximum_runs = 1
       self.run_count = 0

@@ -4,3 +4,32 @@ Ekar::RSpecTask.new(:default) do |t|
   t.spec_opts << '--options' << opts if File.exists?(opts)
   t.spec_files = Dir.glob('test/**/*_spec.rb')
 end
+
+Ekar::GemSpecTask.new do |s|
+  s.name = "ekar"
+  s.version = "0.0.3"
+  s.summary = "ekar"
+  s.description = "ekar was developed by: markbates"
+  s.author = "markbates"
+  s.email = "mark@mackframework.com"
+  s.homepage = "http://www.mackframework.com"
+
+  s.test_files = Ekar::FileList['test/**/*']
+
+  s.files = Ekar::FileList['lib/**/*.*', 'README', 'doc/**/*.*', 'bin/**/*.*']
+  s.require_paths << 'lib'
+
+  s.bindir = "bin"
+  s.executables << "ekar"
+  #s.default_executable = ""
+  #s.add_dependency("", "")
+  #s.add_dependency("", "")
+  #s.extensions << ""
+  s.extra_rdoc_files = ["README"]
+  s.has_rdoc = true
+  #s.platform = "Gem::Platform::Ruby"
+  #s.required_ruby_version = ">= 1.8.6"
+  #s.requirements << "An ice cold beer."
+  #s.requirements << "Some free time!"
+  s.rubyforge_project = "ekar"
+end

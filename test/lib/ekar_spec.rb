@@ -102,6 +102,41 @@ describe Ekar do
       File.read('ekar_test.tmp').should match(/one:two:three/)
     end
     
+    it 'should properly resolve namespaced dependencies' do
+      Ekar.task(:one) do
+        File.open('ekar_test.tmp', 'w') {|f| f.puts "one"}
+      end
+      Ekar.namespace(:two) do
+        Ekar.task(:three, :one) do
+          File.open('ekar_test.tmp', 'a') {|f| f.puts "three"}
+        end
+      end
+      Ekar.run('two:three')
+      File.read('ekar_test.tmp').should == "one\nthree\n"
+      
+      cleanup
+      
+      Ekar.namespace(:two) do
+        Ekar.task(:one) do
+          File.open('ekar_test.tmp', 'w') {|f| f.puts "one"}
+        end
+        Ekar.task(:three, :one) do
+          File.open('ekar_test.tmp', 'a') {|f| f.puts "three"}
+        end
+      end
+      
+      cleanup
+      
+      Ekar.namespace(:two) do
+        Ekar.task(:one) do
+          File.open('ekar_test.tmp', 'w') {|f| f.puts "one"}
+        end
+        Ekar.task(:three, 'two:one') do
+          File.open('ekar_test.tmp', 'a') {|f| f.puts "three"}
+        end
+      end
+    end
+    
   end
   
   describe "task" do
