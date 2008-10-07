@@ -5,7 +5,7 @@ Ekar::RSpecTask.new(:default) do |t|
   t.spec_files = Dir.glob('test/**/*_spec.rb')
 end
 
-Ekar::GemSpecTask.new do |s|
+spec = Ekar::GemSpecTask.new do |s|
   s.name = "ekar"
   s.version = "0.0.3"
   s.summary = "ekar"
@@ -33,3 +33,5 @@ Ekar::GemSpecTask.new do |s|
   #s.requirements << "Some free time!"
   s.rubyforge_project = "ekar"
 end
+
+Ekar::GemReleaseTask.new(spec)

@@ -11,7 +11,8 @@ module Ekar
   
   {:RSpecTask => 'r_spec_task.rb', 
    :GemPackageTask => 'gem_package_task.rb', 
-   :GemSpecTask => 'gem_spec_task.rb'}.each do |k, v|
+   :GemSpecTask => 'gem_spec_task.rb',
+   :GemReleaseTask => 'gem_release_task.rb'}.each do |k, v|
     autoload k, File.join(File.dirname(__FILE__), 'tasks', v)
   end
   

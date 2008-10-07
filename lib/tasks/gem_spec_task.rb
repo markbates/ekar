@@ -10,6 +10,7 @@ module Ekar
       end
       Ekar.namespace(:gem) do
         Ekar::GemPackageTask.new(self.gem_spec) {}
+        
         Ekar.desc "Package and install the #{self.gem_spec.name} gem."
         Ekar.task(:install, :package) do
           sudo = ENV['SUDOLESS'] == 'true' || RUBY_PLATFORM =~ /win32|cygwin/ ? '' : 'sudo'
@@ -17,6 +18,10 @@ module Ekar
         end
       end
       Ekar.alias(:install, 'gem:install')
+    end
+    
+    def method_missing(name, *args)
+      self.gem_spec.send(name, *args)
     end
     
   end
