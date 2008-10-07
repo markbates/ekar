@@ -41,8 +41,13 @@ module Ekar
       super(name, *dependencies, &block)
       block.call(self)
       
+      Ekar.desc "Clean up the #{self.gem_spec.name} gem files."
+      Ekar.task(:clean) do
+        FileUtils.rm_rf(package_dir)
+      end
+      
       Ekar.desc "Package the #{self.gem_spec.name} gem."
-      Ekar.task(name) do |t|
+      Ekar.task(name, :clean) do |t|
         Gem::Builder.new(gem_spec).build
         FileUtils.mv gem_file, "#{package_dir}/#{gem_file}"
       end
